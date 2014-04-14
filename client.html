@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>WebApps with AngularJS</title>
+
+        <meta name="description" content="WebApps with AngularJS">
+        <meta name="author" content="Henk Bakker">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/solarized.css" id="theme">
+        <link rel="stylesheet" href="css/theme/custom.css">
+
+        <link rel="stylesheet" href="lib/css/solarized_dark.css">
+
+    <script src="examples/js/angular.min.js"></script>
+
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+            <div class="slides">
+                <section>
+          <h1>WebApps with <span class="show-off">AngularJS</span></h1>
+          <h3>An overview of the framework</h3>
+          <p>
+            <img src="examples/assets/angularjs.png">
+          </p>
+                    <p>
+                        <small>
+             Henk Bakker
+            </small>
+                    </p>
+                </section>
+
+        <section>
+          <h2>What is <span class="show-off">AngularJS</span></h2>
+          <p>It's a structural framework for dynamic web apps<br/> that's easy to maintain, in a fast and testable way.</p>
+        </section>
+
+        <section>
+          <h2>The principles</h2>
+          <ul class="fragment">
+            <li>Rapid development</li>
+            <li>Modularity</li>
+            <li>Built to be testable</li>
+            <li>Write less code</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What it offers us</h2>
+          <ul class="fragment">
+            <li>Controllers</li>
+            <li>Templates</li>
+            <li>Two-Way data bindings</li>
+            <li>Services</li>
+            <li>Directives</li>
+            <li>Dependency Injection</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>The simplest example</h2>
+          <pre ng-non-bindable><code>
+    &lt;!DOCTYPE html&gt;
+    &lt;html ng-app&gt;
+      &lt;head&gt;
+        &lt;script src="js/angular.min.js"&gt;&lt;/script&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;form&gt;
+          &lt;label&gt;Your name?&lt;/label&gt;
+          &lt;input type="text" ng-model="name" placeholder="Your name?"&gt;
+        &lt;/form&gt;
+        &lt;h3&gt;My name is {{ name }}!&lt;/h3&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+          </code></pre>
+
+          <div class="hide-in-print mt fragment">
+            <hr>
+            <!doctype html>
+            <html ng-app>
+              <body class="mt">
+                <form>
+                  <label>What's your name?</label>
+                  <input class="big-input" type="text" ng-model="name" placeholder="What's your name?">
+                </form>
+                <h3 class="mt">My name is <span class="show-off">{{ name }}</span>!</h3>
+              </body>
+            </html>
+          </div>
+        </section>
+
+        <section>
+          <h2>$scope</h2>
+          <p><span class="show-off">$scope</span> is an object that refers to the application model.<br/> It connects the <strong>View</strong> and the <strong>Controller</strong></p>
+
+          <div class="fragment">
+            <p class="mt">
+              myController.js
+            </p>
+            <pre><code>
+  function MyController($scope) {
+    $scope.name = 'Henk Bakker';
+  }
+            </code></pre>
+
+            <p class="mt">
+              myView.html
+            </p>
+            <pre ng-non-bindable><code>
+  &lt;form ng-controller="MyController"&gt;
+    &lt;input type="text" ng-model="name"&gt;
+  &lt;/form&gt;
+            </code></pre>
+          </div>
+                </section>
+
+        <section>
+                    <h2>Controllers</h2>
+          <p>The controller is a function that augment the <span class="show-off">$scope</span> object.<br>
+          It's used to add a value or to add a behavior to the <span class="show-off">$scope</span>.</p>
+
+          <pre ng-non-bindable class="mt fragment"><code>
+    function TodoCtrl($scope) {
+      $scope.todos = [
+        { text: 'Learn AngularJS', done: true  },
+        { text: 'Create an App',   done: false }
+      ];
+
+      $scope.addTodo = function () {
+        $scope.todos.push({ text: $scope.todoText, done: false });
+        $scope.todoText = '';
+      };
+    };
+          </code></pre>
+                </section>
+
+        <section>
+          <h2>Templates</h2>
+          <p>The templates are simply <span class="show-off">HTML5</span>.<br/>
+          All the presentation logic of the app must be in there.</p>
+
+          <div class="fragment mt">
+            <pre ng-non-bindable><code>
+      &lt;div ng-controller="TodoCtrl"&gt;
+        &lt;ul&gt;
+          &lt;li ng-repeat="todo in todos"&gt;
+            &lt;input type="checkbox" ng-model="todo.done"&gt;
+            &lt;span&gt;{{ todo.text }}&lt;/span&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;form ng-submit="addTodo()"&gt;
+          &lt;input type="text" ng-model="todoText"&gt;
+          &lt;button type="submit"&gt;Add&lt;/button&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+            </code></pre>
+          </div>
+                </section>
+
+        <section>
+          <h2>Result</h2>
+
+          <!doctype html>
+          <html ng-app>
+            <body>
+              <script>
+                function TodoCtrl($scope) {
+                  $scope.todos = [
+                    { text: 'Learn AngularJS', done: true },
+                    { text: 'Create an App', done: false }
+                  ];
+
+                  $scope.addTodo = function () {
+                    if ($scope.todoText) {
+                      $scope.todos.push({ text: $scope.todoText, done: false });
+                      $scope.todoText = '';
+                    }
+                  };
+                };
+              </script>
+
+              <div class="mt" ng-controller="TodoCtrl">
+                <ul class="no-bullets">
+                  <li ng-repeat="todo in todos">
+                    <label>
+                      <input type="checkbox" ng-model="todo.done" class="big-checkbox">
+                      <span class="done-{{ todo.done }}">{{ todo.text }}</span>
+                    </label>
+                  </li>
+                </ul>
+                <form class="mt" ng-submit="addTodo()">
+                  <input placeholder="add new task" class="big-input" type="text" ng-model="todoText">
+                  <button class="big-button" type="submit">Add</button>
+                </form>
+                <small class="fragment mt">{{ todos | json }}</small>
+              </div>
+            </body>
+          </html>
+                </section>
+
+                <section>
+                    <section>
+          <h2>One-Way data binding</h2>
+          <p>Most templating systems bind data in only one direction: they merge template and model components together into a view</p>
+                  <img class="fragment img" height="400" src="examples/assets/one-way-db.png">
+                 
+        </section>
+        <section>
+          <h2>Two-Way data binding</h2>
+          <p>Two-way data binding is the automatic synchronization <br>of data between the model and view.</p>
+                  
+                  <img class="fragment img"  height="400" src="examples/assets/two-way-db.png">
+        </section>
+        </section>
+<section>
+        <section>
+          <h2><span class="show-off">$scope</span> inheritance</h2>
+          <p>When a new <span class="show-off">$scope</span> is created, it's added <br>as a child of it's parent <span class="show-off">$scope</span>.</p>
+
+          <div class="fragment">
+            <p class="mt">MyControllers.js</p>
+            <pre ng-non-bindable><code>
+  function ParentController($scope) {
+    $scope.person = {
+      name     : 'Henk Bakker',
+      helloText: ''
+    };
+  };
+
+  function ChildController($scope) {
+    $scope.sayHello = function () {
+      $scope.person.helloText = "Hi " + $scope.person.name;
+    }
+  };
+            </code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2><span class="show-off">$scope</span> inheritance <small>2</small></h2>
+          <p class="mt">MyView.html</p>
+          <pre ng-non-bindable><code>
+  &lt;div ng-controller="ParentController"&gt;
+    &lt;form ng-controller="ChildController"&gt;
+      &lt;input type="text" ng-model="person.name" placeholder="Name"&gt;
+      &lt;button ng-click="sayHello()"&gt;Say hello&lt;/button&gt;
+    &lt;/form&gt;
+    &lt;p&gt;{{ person.helloText }}&lt;/p&gt;
+  &lt;/div&gt;
+          </code></pre>
+
+          <div class="fragment mt">
+            <!doctype html>
+            <html ng-app>
+              <head>
+                <script>
+                  function ParentController($scope) {
+                    $scope.person = {
+                      name     : 'Henk Bakker',
+                      helloText: ''
+                    };
+                  };
+
+                  function ChildController($scope) {
+                    $scope.sayHello = function () {
+                      $scope.person.helloText = "Hi " + $scope.person.name;
+                    }
+                  };
+                </script>
+              </head>
+              <body>
+                <div ng-controller="ParentController">
+                  <form ng-controller="ChildController">
+                    <input class="big-input" type="text" ng-model="person.name" placeholder="Name"></input>
+                    <button class="big-button" ng-click="sayHello()">Say hello</button>
+                  </form>
+                  <p class="mt">person.helloText = <span class="show-off">{{ person.helloText }}</span></p>
+                </div>
+              </body>
+            </html>
+          </div>
+        </section>
+        </section>
+
+        <section>
+          <h2>Services</h2>
+          <p>Injctable objects that carry out specific tasks.<br> Provide a way to separate concerns and re-use code.</p>
+
+          <ul class="mt fragment">
+            <li>$http (ajax)</li>
+            <li>$locale</li>
+            <li>$timeout</li>
+            <li>$filter</li>
+          </ul>
+                </section>
+<section>
+        <section>
+          <h2>$http</h2>
+          <p>The <span class="show-off">$http</span> <i>service</i> makes easier to integration with external APIs.</p>
+          <p>Main methods: .get, .post, .put, .delete, .jsonp</p>
+          <pre class="mt" ng-non-bindable><code>
+    $http.get('http://address-of.the/api')
+      .success(successCallback)
+      .error(errorCallback);
+
+    $http.post('http://address-of.the/api', data)
+      .success(successCallback)
+      .error(errorCallback);
+          </code></pre>
+                </section>
+
+        <section>
+          <h3>$http - example</h3>
+          <pre ng-non-bindable><code>
+    function BeerController($scope, $http) {
+      $scope.makeRequest = function () {
+        $http.jsonp('http://api.openbeerdatabase.com/v1/beers.json')
+          .success(function (data, status) {
+            $scope.beers = data.beers;
+          })
+          .error(function () {
+            $scope.beers = [{ name: "No beer for you :(" }]
+          });
+      };
+    };
+          </code></pre>
+          <pre ng-non-bindable><code>
+    &lt;div ng-controller="BeerController"&gt;
+      &lt;ul&gt;
+        &lt;li ng-repeat="beer in beers | limitTo:15"&gt;
+          {{ beer.name }} - {{ beer.brewery.name }}
+        &lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;button ng-click="makeRequest()"&gt;Get beers&lt;/button&gt;
+    &lt;/div&gt;
+          </code></pre>
+                </section>
+
+        <section>
+          <h2>$http - Result</h2>
+
+          <div class="mt">
+            <!doctype html>
+            <html ng-app>
+              <body>
+                <script>
+                  function BeersController($scope, $http) {
+                    $scope.makeRequest = function () {
+  
+                        $http.jsonp('http://prost.herokuapp.com/api/v1/beer/rand?callback=JSON_CALLBACK')
+                        .success(function (data, status) {
+                            $scope.beers = [data];
+                        })
+                        .error(function () {
+                          $scope.beers = [{ name: "No beer for you :(" }]
+                        });
+                    };
+                  };
+                </script>
+                <div ng-controller="BeersController">
+                  <ul class="beer-list">
+                    <li ng-repeat="beer in beers | limitTo:15">
+                      <span class="show-off">{{ beer.title }}</span>
+                      <span class="beer-brewery">{{ beer.brewery.title }}</span>
+                    </li>
+                  </ul>
+                  <p class="mt">
+                    <button class="big-button" ng-click="makeRequest()">Get beers</button>
+                  </p>
+                </div>
+              </body>
+            </html>
+          </div>
+                </section>
+                </section>
+
+        <section>
+          <h2>Modules</h2>
+          <p>Angular <span class="show-off">modules</span> declaratively specify <br>how an application should be bootstrapped.</p>
+
+          <pre class="mt" ng-non-bindable><code>
+    var app = angular.module('myApp', ['third-part-module']);
+
+    app.config(function () { ... });     <!-- Configuration -->
+    app.controller('myController', ...); <!-- Create a controller -->
+    app.service('myService', ...);       <!-- Create a service -->
+          </code></pre>
+
+          <pre class="mt" ng-non-bindable><code>
+    &lt;html ng-app="myApp"&gt;
+      ...
+    &lt;/html&gt;
+          </code></pre>
+                </section>
+
+        <section>
+                    <h2>Routing</h2>
+          <p>In a more complex app you can use the <i class="show-off">$routeProvider</i> service, to define which <i>controller</i> and <i>template</i> will be loaded in each <i>path</i>.</p>
+          <pre class="fragment" ng-non-bindable><code>
+  var app = angular.module('myApp');
+
+  app.config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        controller :'mainController', templateUrl :'/views/index.html'
+      })
+      .when('/newPost/', {
+        controller :'newPostController', templateUrl :'/views/newPost.html'
+      })
+      .when('/posts/:id', {
+        controller :'postsController', templateUrl :'/views/posts.html'
+      })
+      .otherwise({ redirectTo : '/' });
+    });
+          </code></pre>
+                </section>
+
+
+        <section>
+        <section>
+          <h2>Directives</h2>
+          <blockquote>"Teach new tricks to the HTML"</blockquote>
+          <ol class="mt fragment">
+            <li>Create custom attributes</li>
+            <li>Create custom HTML tags<br/><small>(based on W3C <i class="show-off">webcomponents</i> specification)</small></li>
+          </ol>
+                </section>
+
+        <section>
+          <h2>Directives <small>2</small></h2>
+          <p>All the attributes that begin with <span class="show-off">"ng"</span> are AngularJS <span class="show-off">directives</span>.</p>
+          <ul class="mt fragment">
+            <li>ng-app</li>
+            <li>ng-controller</li>
+            <li>ng-model</li>
+            <li>ng-repeat</li>
+            <li>ng-click</li>
+            <li>ng-view</li>
+            <li>...</li>
+          </ul>
+                </section>
+
+        <section>
+          <h2>Directives <small>3</small></h2>
+          <p>How to use <i>directives</i></p>
+          <pre ng-non-bindable class="mt"><code>
+      &lt;!doctype html&gt;
+      &lt;html ng-app="myApp"&gt;
+        &lt;head&gt;
+          &lt;script src="../js/angular.min.js"&gt;&lt;/script&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+          &lt;ul ng-controller="myListController"&gt;
+            &lt;li ng-repeat="item in items"&gt;
+              {{ item.name }}
+            &lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/body&gt;
+      &lt;/html&gt;
+          </code></pre>
+                </section>
+
+        <section>
+          <h2>Directives <small>4</small></h2>
+          <p>You can also create you own <i>directive</i>.</p>
+          <ul class="mt fragment">
+            <li>
+              <strong>element</strong>: <span class="show-off">&lt;my-directive>&lt;/my-directive&gt;</span>
+            </li>
+            <li class="mt">
+              <strong>atribute</strong>: <span class="show-off">&lt;span my-directive="value"&gt;&lt;/span&gt;<span class="show-off">
+            </li>
+            <li class="mt">
+              <strong>class</strong>: <span class="show-off">&lt;span class="my-directive: value;"&gt;&lt;/span&gt;<span class="show-off">
+            </li>
+            <li class="mt">
+              <strong>comment</strong>: <span class="show-off">&lt;!-- directive: my-directive value --&gt;<span class="show-off">
+            </li>
+          </ul>
+                </section>
+
+        <section>
+          <h2>Directives <small>5</small></h2>
+          <pre ng-non-bindable><code>
+    var app = angular.module('myApp');
+
+    app.directive('myDirective', function () {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element) {
+          element.text('Text from directive');
+        }
+      };
+    });
+          </code></pre>
+
+          <pre ng-non-bindable><code>
+    &lt;my-directive&gt; &lt;/my-directive&gt;  <!-- Directive as element -->
+
+    &lt;div my-directive&gt; &lt;/div&gt;       <!-- Directive as attribute -->
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Directives <small>6</small></h2>
+          <pre ng-non-bindable><code>
+    var app = angular.module('myApp');
+
+    app.directive('myDirective', function () {
+      return {
+        restrict: 'E',
+        replace:  true,
+        template: '<h1 class="title"></h1>'
+        link: function ($scope, element) {
+          element.text('Text from directive');
+        }
+      };
+    });
+          </code></pre>
+
+          <pre ng-non-bindable><code>
+    &lt;my-directive&gt; &lt;/my-directive&gt;             <!-- Custom tag -->
+
+    &lt;h1 class="title"&gt;Text from directive&lt;/h1&gt; <!-- Replaced by the template -->
+          </code></pre>
+        </section>
+        </section>
+
+        <section>
+          <h2>Testing your App</h2>
+          <p>A framework to be easily tested</p>
+          <div class="fragment mt">
+            <h4>Tools:</h4>
+            <ul class="mt">
+              <li><span class="show-off">Karma</span> <small>Test runner</small></li>
+              <li><span class="show-off">Jasmine</span> <small>Test framework</small></li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>Testing a controller</h2>
+          <pre ng-non-bindable><code>
+  describe('Testing Controller', function () {
+    var ctrl, scope;
+
+    beforeEach(angular.mock.module('myApp'));
+
+    beforeEach(inject(function ($controller, $rootScope) {
+      scope = $rootScope.$new();
+      ctrl  = $controller('myController', { $scope: scope });
+    }));
+
+    it('should exist a controller called myController', function() {
+      expect(scope).not.toBeUndefined();
+    });
+  });
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>End-to-end Tests</h2>
+          <pre ng-non-bindable><code>
+  describe('Grocery list', function () {
+    beforeEach(function () {
+      browser().navigateTo('/');
+    });
+
+    it('filters the grocery list based on the search query', function() {
+      expect(repeater('.groceries li').count()).toBe(5);
+
+      input('query').enter('b');
+      expect(repeater('.groceries li').count()).toBe(3);
+
+      input('query').enter('blueberry');
+      expect(repeater('.groceries li').count()).toBe(1);
+    });
+  });
+          </code></pre>
+        </section>
+        <section>
+            <section>
+
+                <h1>DEMO TIME</h1>
+
+            </section>
+
+            <section>
+                <h2>JukeTube</h2>
+                <img class="img" src="examples/assets/juketube.png" height="400">
+            </section>
+            <section>
+                <h2>jHipster</h2>
+                <img  class="img" src="examples/assets/screenshot_1.png" height="400">
+            </section>
+            <section>
+                <h2>Ionic</h2>
+                <img class="img" src="examples/assets/phones-weather-demo@2x.png" height="400">
+            </section>
+        </section>
+
+        <section>
+
+<section>
+                    <h2>Learn</h2>
+          <ul>
+            <li>Thinkster     - <a href="http://www.thinkster.io/pick/GtaQ0oMGIl/a-better-way-to-learn-angularjs" target="_blank">http://thinkster.io/</a></li>
+            <li>Year of Moo - <a href="http://www.yearofmoo.com/" target="_blank">http://www.yearofmoo.com/</a></li>
+            <li>HTML5 Rocks   - <a href="http://www.html5rocks.com" target="_blank">http://html5rocks.com/</a></li>
+            <li>TodoMVC       - <a href="http://todomvc.com/" target="_blank">http://todomvc.com/</a></li>
+          </ul>
+          </section>
+            <section>
+                    <h2>References</h2>
+          <ul>
+            <li>Angular - <a href="http://angularjs.org/" target="_blank">http://angularjs.org/</a></li>
+            <li>Karma   - <a href="http://karma-runner.github.io/" target="_blank">http://karma-runner.github.io/</a></li>
+            <li>Jasmine - <a href="http://pivotal.github.io/jasmine/" target="_blank">http://pivotal.github.io/jasmine/</a></li>
+          </ul>
+          </section>
+          
+        </section>
+
+        <section>
+                    <h1>The End</h1>
+                    <h2>Henk Bakker</h2>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+                        // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: false,
+                progress: false,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                multiplex: {
+        // Example values. To generate your own, see the socket.io server instructions.
+        secret: null, // Obtained from the socket.io server. Gives this (the master) control of the presentation
+        id: 'a2b7208111e0b355', // Obtained from socket.io server
+        url: 'http://192.168.19.165:1948' // Location of socket.io server
+    },
+
+                // Parallax scrolling
+                // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+                // parallaxBackgroundSize: '2100px 900px',
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    //{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    //{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    //{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+                            { src: '//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js', async: true },
+        { src: 'plugin/multiplex/client.js', async: true },
+
+        // and if you want speaker notes
+        //{ src: 'plugin/notes-server/client.js', async: true }
+
+                ]
+            });
+        </script>
+    </body>
+</html>
