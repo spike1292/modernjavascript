@@ -46,13 +46,13 @@
 // dynamic scope
 (function () {
     function g() {
-        print("global");
+        document.writeln("global");
     }
 
     function f(cond) {
         if (cond) {
             function g() {
-                print("inner");
+                document.writeln("inner");
             }
         }
         g(); // "inner" when cond, "global" when !cond
@@ -81,6 +81,7 @@
 })();
 
 // closure
+// http://jibbering.com/faq/notes/closures/
 (function () {
     var foo = function (arg) {
         var bar = 'baz';

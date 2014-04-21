@@ -1,52 +1,52 @@
 .show-off {
-  color: #cb4b16;
+    color: #cb4b16;
 }
 
 .big-input {
-  padding: 6px 10px;
-  font-size: 18px;
-  margin-left: 10px;
-  vertical-align: middle;
+    padding: 6px 10px;
+    font-size: 18px;
+    margin-left: 10px;
+    vertical-align: middle;
 }
 
 .big-button {
-  font-size: 18px;
-  padding: 6px;
-  vertical-align: middle;
+    font-size: 18px;
+    padding: 6px;
+    vertical-align: middle;
 }
 
 .big-checkbox {
-  width: 25px;
-  height: 25px;
+    width: 25px;
+    height: 25px;
 }
 
 .done-true {
-  text-decoration: line-through;
-  color: grey;
+    text-decoration: line-through;
+    color: grey;
 }
 
 .mt {
-  margin-top: 40px !important;
+    margin-top: 40px !important;
 }
 
 .no-bullets {
-  list-style: none !important;
+    list-style: none !important;
 
 }
 
 .beer-list {
-  height: 199px;
-  overflow: auto;
-  font-size: .8em !important;
-  text-align: center !important;
+    height: 199px;
+    overflow: auto;
+    font-size: .8em !important;
+    text-align: center !important;
 }
 
 .beer-brewery {
-  font-size: .5em !important;
+    font-size: .5em !important;
 }
 
 .img {
-  vertical-align: middle !important;
+    vertical-align: middle !important;
 }
 
 .column-3 {
@@ -58,10 +58,34 @@
     column-gap: 50%;
 }
 
-.column-img{
+.column-img {
     height: 400px;
 }
 
-.column-list{
+.column-list {
     height: 225px;
+}
+
+.quote {
+    color: #eee8d5;
+}
+
+.quote h2 {
+    color: #eee8d5;
+}
+
+.title {
+    color: #eee8d5;
+}
+
+.title h1, .title h2, .title h3 {
+    color: #eee8d5;
+}
+
+.white{
+    color:#fdf6e3;
+}
+
+.magenta{
+    color:#d33682;
 }
