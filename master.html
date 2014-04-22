@@ -163,27 +163,27 @@
     <section>
         <h2>Functions <small>2</small></h2>
         <pre><code>//function definition (global)
-function greet(name) {
-    return 'hello ' + name;
-}
-//anonymous function expression
-var greet = function (name) {
-    return 'hello ' + name;
-};
-//named function expression
-var greet = function greet(name) {
-    return 'hello ' + name;
-};</code></pre>
+            function greet(name) {
+            return 'hello ' + name;
+            }
+            //anonymous function expression
+            var greet = function (name) {
+            return 'hello ' + name;
+            };
+            //named function expression
+            var greet = function greet(name) {
+            return 'hello ' + name;
+            };</code></pre>
         <pre><code>//passed as argument
-var surround = function (func, name) {
-    return '(' + func(name) + ')';
-}
-// returned
-var makeGreet = function () {
-    return function (name){
-        return 'hello' + name;
-    };
-};</code></pre>
+            var surround = function (func, name) {
+            return '(' + func(name) + ')';
+            }
+            // returned
+            var makeGreet = function () {
+            return function (name){
+            return 'hello' + name;
+            };
+            };</code></pre>
 
     </section>
 
@@ -208,97 +208,97 @@ var makeGreet = function () {
     <section>
         <h2>Scope <small>2</small></h2>
         <pre><code>var foo = function () {
-    var a = 3, b = 5;
-    var bar = function () {
-        var b = 7,
+            var a = 3, b = 5;
+            var bar = function () {
+            var b = 7,
             c = 11;
-        a += b + c;
-        //a: 21, b: 7, c: 11
-    };
-    //a: 3, b: 5
-    bar();
-    //a: 21, b: 5
-};</code></pre>
+            a += b + c;
+            //a: 21, b: 7, c: 11
+            };
+            //a: 3, b: 5
+            bar();
+            //a: 21, b: 5
+            };</code></pre>
     </section>
-	<section>
-		<h2>Dynamic Scope</h2>
+    <section>
+        <h2>Dynamic Scope</h2>
         <p>Where the scope of the parent function in which an inner function is defined can be mutated at run-time.</p>
 		<pre><code>function g() {
-    document.writeln("global");
-}
+            document.writeln("global");
+            }
 
-function f(cond) {
-    if (cond) {
-        function g() {
+            function f(cond) {
+            if (cond) {
+            function g() {
             document.writeln("inner");
-        }
-    }
-    g(); // "inner" when cond, "global" when !cond
-}</code></pre>
-	</section>
+            }
+            }
+            g(); // "inner" when cond, "global" when !cond
+            }</code></pre>
+    </section>
 </section>
 <section>
     <h2>Hoisting</h2>
     <p>Declaration is moved to the top of the scope</p>
     <p>Also for function declaration</p>
     <pre><code>var foo = 'hi!';
-var bar = function () {
-    document.writeln(foo); //undefined
-    var foo = 'hello!';
-    document.writeln(foo); //hello!
-};
-bar();</code></pre>
+        var bar = function () {
+        document.writeln(foo); //undefined
+        var foo = 'hello!';
+        document.writeln(foo); //hello!
+        };
+        bar();</code></pre>
     <p class="fragment" data-fragment-index="1">Is the same as:</p>
     <pre class="fragment" data-fragment-index="1"><code>var foo = 'hi!';
-var bar = function () {
-    // single var -> the good parts
-    var foo;
-    document.writeln(foo); //undefined
-    foo = 'hello!';
-    document.writeln(foo); //hello!
-};
-bar();</code></pre>
+        var bar = function () {
+        // single var -> the good parts
+        var foo;
+        document.writeln(foo); //undefined
+        foo = 'hello!';
+        document.writeln(foo); //hello!
+        };
+        bar();</code></pre>
 </section>
 <section>
     <h2>Closure</h2>
     <p>Inner function get access to variables and parameter of parent function</p>
     <p>Variables, not values</p>
     <pre><code>var foo = function (arg) {
-    var bar = 'baz';
-    return {
+        var bar = 'baz';
+        return {
         getBar: function () {
-            return bar + arg;
+        return bar + arg;
         }
-    };
-};
-document.writeln(foo('!').getBar());
-//print: baz!</code></pre>
+        };
+        };
+        document.writeln(foo('!').getBar());
+        //print: baz!</code></pre>
 </section>
 <section>
     <section>
-    <h2>Objects</h2>
-    <p><span class="show-off">JavaScript</span> is fundamentally about <span class="show-off">objects</span></p>
-    <ul>
-        <li class="fragment">Arrays are <span class="show-off">objects</span></li>
-        <li class="fragment">Functions are <span class="show-off">objects</span></li>
-        <li class="fragment">Objects are <span class="show-off">objects</span></li>
-    </ul>
+        <h2>Objects</h2>
+        <p><span class="show-off">JavaScript</span> is fundamentally about <span class="show-off">objects</span></p>
+        <ul>
+            <li class="fragment">Arrays are <span class="show-off">objects</span></li>
+            <li class="fragment">Functions are <span class="show-off">objects</span></li>
+            <li class="fragment">Objects are <span class="show-off">objects</span></li>
+        </ul>
     </section>
     <section>
         <h2>Objects <small>2</small></h2>
         <pre><code>var bar = {
-    name: {
-        first: 'Henk',
-        last: 'Bakker'
-    },
-    age: 21,
-    active: true,
-    twitter: function () {
-        var n = this.name;
-        return '@' + n.first + n.last;
-    },
-    tags: ['js', 'web', 'abn']
-};</code></pre>
+            name: {
+            first: 'Henk',
+            last: 'Bakker'
+            },
+            age: 21,
+            active: true,
+            twitter: function () {
+            var n = this.name;
+            return '@' + n.first + n.last;
+            },
+            tags: ['js', 'web', 'abn']
+            };</code></pre>
     </section>
     <section>
         <h2>So what are <span class="show-off">objects</span>?</h2>
@@ -307,30 +307,30 @@ document.writeln(foo('!').getBar());
     <section>
         <h2>Objects</h2>
         <pre><code>//Object are dynamic
-var person = {};
+            var person = {};
 
-//set operations
-person.name = 'henk';
-person['surname'] = 'bakker';
+            //set operations
+            person.name = 'henk';
+            person['surname'] = 'bakker';
 
-//get operations
-var n = person.name = 'henk';
-var s = person['surname'] = 'bakker';
-var a = person.age || "not set"; //safe
+            //get operations
+            var n = person.name = 'henk';
+            var s = person['surname'] = 'bakker';
+            var a = person.age || "not set"; //safe
 
-//delete operations
-delete person.surname;</code></pre>
+            //delete operations
+            delete person.surname;</code></pre>
         <pre><code>//enumeration
-var prop;
-for (prop in person) {
-    document.writeln(prop + ':' + person[prop]);
-} // print: name:henk
+            var prop;
+            for (prop in person) {
+            document.writeln(prop + ':' + person[prop]);
+            } // print: name:henk
 
-//methods
-person.say = function (word) {
-    return word + ' ' + this.name;
-};
-document.writeln('hello');</code></pre>
+            //methods
+            person.say = function (word) {
+            return word + ' ' + this.name;
+            };
+            document.writeln('hello');</code></pre>
     </section>
 </section>
 <section>
@@ -338,16 +338,16 @@ document.writeln('hello');</code></pre>
         <h2>Prototype</h2>
         <p>Linkage feature that allows one object to inherit the properties of another</p>
         <pre><code>var name = {
-    first: 'henk',
-    last: 'bakker'
-};
+            first: 'henk',
+            last: 'bakker'
+            };
 
-var twitter = Object.create(name);
-twitter.account = function () {
-    return '@' + this.first + this.last;
-};
-document.writeln(twitter.account());
-// print: @henkbakker</code></pre>
+            var twitter = Object.create(name);
+            twitter.account = function () {
+            return '@' + this.first + this.last;
+            };
+            document.writeln(twitter.account());
+            // print: @henkbakker</code></pre>
     </section>
     <section>
         <h2>Prototype <small>2</small></h2>
@@ -376,41 +376,41 @@ document.writeln(twitter.account());
     <section>
         <h2>Context <span class="show-off">(this)</span> <small>2</small></h2>
         <pre><code>//function invocation
-var sum = function (a, b) {
-    return a + b;
-};
-//this is bound to the global object
-var value = sum(1, 2);
+            var sum = function (a, b) {
+            return a + b;
+            };
+            //this is bound to the global object
+            var value = sum(1, 2);
 
-//method invocation
-var foo = {
-    value: 0,
-    increment: function (inc) {
-        this.value += inc;
-    }
-};
-//this is bound to foo
-foo.increment(2);</code></pre>
-</section>
-<section>
-	<h2>Context <span class="show-off">(this)</span> <small>3</small></h2>
+            //method invocation
+            var foo = {
+            value: 0,
+            increment: function (inc) {
+            this.value += inc;
+            }
+            };
+            //this is bound to foo
+            foo.increment(2);</code></pre>
+    </section>
+    <section>
+        <h2>Context <span class="show-off">(this)</span> <small>3</small></h2>
         <pre><code>//constructor invocation
-var Foo = function (string) {
-    this.bar = string;
-};
-//this is bound to the new object
-var one = new Foo('one');
-var two = new Foo('two');
+            var Foo = function (string) {
+            this.bar = string;
+            };
+            //this is bound to the new object
+            var one = new Foo('one');
+            var two = new Foo('two');
 
-//apply invocation
-var foo = {
-    value: 0
-};
-var increment = function (inc) {
-    this.value += inc;
-};
-//this is bound to the first param
-increment.apply(foo, [1]);</code></pre>
+            //apply invocation
+            var foo = {
+            value: 0
+            };
+            var increment = function (inc) {
+            this.value += inc;
+            };
+            //this is bound to the first param
+            increment.apply(foo, [1]);</code></pre>
     </section>
 </section>
 <section data-background-color="#268bd2" class="title">
@@ -441,16 +441,16 @@ increment.apply(foo, [1]);</code></pre>
         <h2>Constructor Function</h2>
         <ul>
             <li>When we need many independent instance of some object</li>
-        <li>Add constructor logic</li>
-        <li>Reduce memory allocation</li>
+            <li>Add constructor logic</li>
+            <li>Reduce memory allocation</li>
         </ul>
         <pre><code></code></pre>
     </section>
     <section>
         <h2>ECMAScript 5</h2>
         <ul>
-        <li>Creating an object without going through its constructor</li>
-        <li>Better object’s properties specification</li>
+            <li>Creating an object without going through its constructor</li>
+            <li>Better object’s properties specification</li>
         </ul>
         <pre><code></code></pre>
     </section>
@@ -543,7 +543,7 @@ increment.apply(foo, [1]);</code></pre>
     // Full list of configuration options available here:
     // https://github.com/hakimel/reveal.js#configuration
     Reveal.initialize({
-        controls: true,
+        controls: false,
         progress: true,
         history: true,
         center: true,
@@ -555,7 +555,7 @@ increment.apply(foo, [1]);</code></pre>
 
         multiplex: {
             // Example values. To generate your own, see the socket.io server instructions.
-            secret: '', // null so the clients do not have control of the master presentation
+            secret: '13981427895117764974', // null so the clients do not have control of the master presentation
             id: '02fcc73dc6df23d8', // id, obtained from socket.io server
             url: 'modernjavascript.herokuapp.com:80' // Location of socket.io server
         },
@@ -567,7 +567,7 @@ increment.apply(foo, [1]);</code></pre>
         // Optional libraries used to extend on reveal.js
         dependencies: [
             { src: '//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js', async: true },
-            { src: 'plugin/multiplex/client.js', async: true },
+            { src: 'plugin/multiplex/master.js', async: true },
             { src: 'lib/js/classList.js', condition: function () {
                 return !document.body.classList;
             } },
