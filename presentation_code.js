@@ -303,6 +303,7 @@
 
 
 //inheritance pseudo
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
 (function () {
     var Car = function (speed) {
         this.speed = speed;
@@ -315,7 +316,9 @@
         this.speed = speed;
         this.power = power;
     };
-    Supercar.prototype = new Car();
+    Supercar.prototype = Object.create(Car.prototype);
+    Supercar.prototype.constructor = Supercar;
+
     Supercar.prototype.boost = function () {
         this.speed += this.power;
     };

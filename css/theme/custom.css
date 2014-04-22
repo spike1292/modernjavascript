@@ -89,3 +89,7 @@
 .magenta{
     color:#d33682;
 }
+
+.reveal pre code.javascript{
+    max-height: none;
+}

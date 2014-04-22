@@ -173,8 +173,8 @@ var greet = function (name) {
 //named function expression
 var greet = function greet(name) {
     return 'hello ' + name;
-};</code></pre>
-        <pre><code>//passed as argument
+};
+//passed as argument
 var surround = function (func, name) {
     return '(' + func(name) + ')';
 }
@@ -319,8 +319,8 @@ var s = person['surname'] = 'bakker';
 var a = person.age || "not set"; //safe
 
 //delete operations
-delete person.surname;</code></pre>
-        <pre><code>//enumeration
+delete person.surname;
+//enumeration
 var prop;
 for (prop in person) {
     document.writeln(prop + ':' + person[prop]);
@@ -431,11 +431,24 @@ increment.apply(foo, [1]);</code></pre>
     <section>
         <h2>Object Literal</h2>
         <ul>
-            <li>Object Literal</li>
             <li>When we need only one object of some kind</li>
             <li>Reduce a large number of parameters Collect settings</li>
         </ul>
-        <pre><code></code></pre>
+        <pre><code data-trim>var makePerson = function () {
+    var settings = {
+        say: 'hallo',
+        name: 'sir'
+    };
+    var greeting = function (spec) {
+        return spec.say || settings.say + ' ' + spec.name || settings.name;
+    };
+    return {
+        greeting: greeting
+    }
+};
+var p = makePerson();
+var result = p.greeting({name: 'henk'});
+//result: hello henk</code></pre>
     </section>
     <section>
         <h2>Constructor Function</h2>
@@ -444,7 +457,23 @@ increment.apply(foo, [1]);</code></pre>
         <li>Add constructor logic</li>
         <li>Reduce memory allocation</li>
         </ul>
-        <pre><code></code></pre>
+        <pre><code>var Person = function (name) {
+    this.name = name;
+    //bad: redefined for each new object
+    this.toString = function () {
+        return 'I am ' + this.name;
+    }
+};
+//good: defined one time for all objects
+Person.prototype.greeting = function (say) {
+    return say + ' ' + this.name;
+};
+var p1 = new Person('henk');
+var p2 = new Person('jan');
+var result1 = p1.greeting('hi');
+var result2 = p2.toString();
+//result1: hi henk
+//result2: I am jan</code></pre>
     </section>
     <section>
         <h2>ECMAScript 5</h2>
@@ -452,7 +481,21 @@ increment.apply(foo, [1]);</code></pre>
         <li>Creating an object without going through its constructor</li>
         <li>Better object’s properties specification</li>
         </ul>
-        <pre><code></code></pre>
+        <pre><code>var Person = Object.create(Object.prototype);
+Person.prototype = {
+    greeting: function (say) {
+        return say + ' ' + this.name;
+    }
+};
+var p = Object.create(Person.prototype, {
+    name: {
+        writeble: true,
+        configurable: true,
+        value: 'henk'
+    }
+});
+var result = p.greeting('hi');
+//result: hi henk</code></pre>
     </section>
 </section>
 <section>
@@ -461,28 +504,84 @@ increment.apply(foo, [1]);</code></pre>
         <p><span class="show-off">JavaScript</span> does not offer accessibility levels (public, private, etc.) on members</p>
 
         <p>This does not mean that <span class="show-off">JavaScript</span> objects can’t have private members</p>
-        <pre><code></code></pre>
+        <pre><code>var foo = {
+    names: ['one', 'two', 'three'],
+    digit_name: function (n) {
+        return this.names[n];
+    }
+};
+//remove 'three' aka change
+//internal state, very very bad!@!
+foo.names.splice(2, 1);
+document.writeln(foo.digit_name(2));
+//print: undefined</code></pre>
     </section>
     <section>
         <h2>Information hiding <small>2</small></h2>
         <p>The array will be created each time the function is invoked</p>
-        <pre><code></code></pre>
+        <pre><code>//private but slow
+var digit_name = function (n) {
+    var names = ['one', 'two', 'three'];
+    return names[n];
+};
+var foo = {
+    digit_name: digit_name
+};
+document.writeln(foo.digit_name(2));
+//print: three</code></pre>
     </section>
     <section>
         <h2>Information hiding <small>3</small></h2>
         <p>We can use functions and closure to make modules.</p>
         <p>A module is a function or object that presents an interface but that hides its state and implementation.</p>
         <p>Also known as: <span class="show-off">Module Pattern</span></p>
-        <pre><code></code></pre>
+        <pre><code>//private and fast, thank's to immediate functions and closure
+var digit_name = (function () {
+    var names = ['one', 'two', 'thee'];
+    return function (n) {
+        return names[n];
+    };
+})();
+var foo = {
+    digit_name: digit_name
+};
+document.writeln(foo.digit_name(2));
+//print: three</code></pre>
     </section>
 </section>
 <section>
     <section>
         <h2>Inheritance <span class="show-off">(Pseudoclassical)</span></h2>
-        <p>Objects produced by constructor functions</p>
-        <p>The prototype object is the place where inherited traits are to be deposited</p>
-        <p>Create an object whose prototype is Function’s prototype and initialize it executing Function</p>
-        <pre><code></code></pre>
+<ul>
+        <li>Objects produced by constructor functions</li>
+        <li>The prototype object is the place where inherited traits are to be deposited</li>
+        <li>Create an object whose prototype is Function’s prototype and initialize it executing Function</li>
+	</ul>
+</section>
+<section>
+		<h2>Inheritance <span class="show-off">(Pseudoclassical)</span> <small>2</small></h2>
+        <pre><code>var Car = function (speed) {
+    this.speed = speed;
+};
+Car.prototype.accelerates = function (level) {
+    this.speed += level;
+};
+//supercar inherit from car
+var Supercar = function (speed, power) {
+    this.speed = speed;
+    this.power = power;
+};
+Supercar.prototype = Object.create(Car.prototype);
+Supercar.prototype.constructor = Supercar;
+
+Supercar.prototype.boost = function () {
+    this.speed += this.power;
+};
+var s = new Supercar(3, 100);
+s.accelerates(5);
+s.boost();
+document.writeln(s.speed);
+//print: 108</code></pre>
     </section>
 </section>
 <section data-background-color="#2aa198" class="quote">
@@ -493,41 +592,110 @@ increment.apply(foo, [1]);</code></pre>
 <section>
     <section>
         <h2>Inheritance <span class="show-off">(Prototypal)</span></h2>
+<ul>
+        <li>JavaScript natual way</li>
 
-        <p>JavaScript natual way</p>
+        <li>Class-free</li>
 
-        <p>Class-free</p>
+        <li>Objects inherit from objects (Delegation)</li>
 
-        <p>Objects inherit from objects (Delegation)</p>
+        <li>Customizing the new one (Differential Inheritance)</li>
 
-        <p>Customizing the new one (Differential Inheritance)</p>
-
-        <p>Officially a part of the language (ECMAScript 5)</p>
-        <pre><code></code></pre>
+        <li>Officially a part of the language (ECMAScript 5)</li>
+	</ul>
+	</section>
+	<section>
+		<h2>Inheritance <span class="show-off">(Prototypal)</span> <small>2</small></h2>
+        <pre><code>var car = {
+    speed: 0,
+    accelerates: function (level) {
+        this.speed += level;
+    }
+};
+//supercar inherit from car
+var supercar = Object.create(car);
+supercar.boost = function () {
+    this.accelerates(100);
+};
+car.accelerates(2);
+supercar.boost();
+document.writeln(car.speed, ' ', supercar.speed, 
+	' ', supercar.hasOwnProperty('accelerates'));
+//print: 2 102 false</code></pre>
     </section>
 </section>
 <section>
     <section>
         <h2>Inheritance <span class="show-off">(Copy)</span></h2>
-        <p>The easiest way</p>
-        <p>Objects inherit from objects (Shallow/Deep Copy)</p>
-        <pre><code></code></pre>
-    </section>
-    <section>
-        <h2>Inheritance <span class="show-off">(Copy)</span></h2>
-        <pre><code></code></pre>
+<ul>
+        <li>The easiest way</li>
+        <li>Objects inherit from objects (Shallow/Deep Copy)</li>
+</ul>
+</section>
+<section>
+	<h2>Inheritance <span class="show-off">(Copy)</span> <small>2</small></h2>
+        <pre><code>var extend = function (parent, child) {
+    var i, child = child || {};
+    for (i in parent) {
+        if (parent.hasOwnProperty(i)) {
+            child[i] = parent[i];
+        }
+    }
+    return child;
+};
+var car = {
+    speed: 0,
+    accelerates: function (level) {
+        this.speed += level;
+    }
+};
+//supercar inherit(copy) from car
+var supercar = extend(car);
+supercar.boost = function () {
+    this.accelerates(100);
+};
+car.accelerates(2);
+supercar.boost();
+document.writeln(car.speed, ' ', supercar.speed, 
+	' ', supercar.hasOwnProperty('accelerates'));
+//print: 2 100 false</code></pre>
     </section>
 </section>
 <section>
     <section>
         <h2>Inheritance <span class="show-off">(Mixins)</span></h2>
-        <p>Simulate multi-inheritance</p>
-        <p>Objects inherit from many objects (Shallow/Deep Copy)</p>
-        <pre><code></code></pre>
+		<ul>
+        <li>Simulate multi-inheritance</li>
+        <li>Objects inherit from many objects (Shallow/Deep Copy)</li>
+</ul>
     </section>
     <section>
         <h2>Inheritance <span class="show-off">(Mixins)</span></h2>
-        <pre><code></code></pre>
+        <pre><code>var mixin = function () {
+    var arg, prop, child = {};
+    for (arg = 0; arg < arguments.length; arg += 1) {
+        for (prop in arguments[arg]) {
+            if (arguments[arg].hasOwnProperty(prop)) {
+                child[prop] = arguments[arg][prop];
+            }
+        }
+    }
+    return child;
+};
+var car = {
+    speed: 0,
+    accelerates: function (level) {
+        this.speed += level;
+    }
+};
+var person = {name: 'a'};
+//supercar inherit(copy) from car
+var supercar = mixin(car, person);
+supercar.name = 'supercar';
+supercar.accelerates(3);
+
+document.writeln(car.speed, ' ', supercar.name, ' ', supercar.speed);
+//print: 0 supercar 3</code></pre>
     </section>
 </section>
 <section data-background-color="#cb4b16"><h1><span class="white">Questions</span></h1></section>
